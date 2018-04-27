@@ -16,7 +16,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Componen
 
     private ActivityComponent activityComponent;
     private Unbinder unbinder;
-    private MvpPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,14 +24,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Componen
         inject();
         setContentView(provideLayout());
         unbinder = ButterKnife.bind(this);
-        presenter = providePresenter();
-        presenter.onAttach(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.onDetach();
         unbinder.unbind();
     }
 
@@ -49,8 +45,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Componen
     }
 
     protected abstract int provideLayout();
-
-    protected abstract MvpPresenter providePresenter();
 
     public void inject() {}
 }

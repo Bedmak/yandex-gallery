@@ -21,6 +21,7 @@ public abstract class BaseFragment extends Fragment implements MvpView {
     private Unbinder unbinder;
     private ComponentActivity componentActivity;
     private FragmentComponent fragmentComponent;
+    private MvpPresenter presenter;
 
     @Override
     public void onAttach(Context context) {
@@ -45,6 +46,8 @@ public abstract class BaseFragment extends Fragment implements MvpView {
         inject();
         View view = inflater.inflate(provideLayout(), container, false);
         unbinder = ButterKnife.bind(this, view);
+        presenter = providePresenter();
+        presenter.onAttach(this);
         return view;
     }
 
@@ -52,6 +55,7 @@ public abstract class BaseFragment extends Fragment implements MvpView {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        presenter.onDetach();
     }
 
     public FragmentComponent initDaggerFragmentComponent() {
@@ -61,6 +65,8 @@ public abstract class BaseFragment extends Fragment implements MvpView {
     }
 
     protected abstract int provideLayout();
+
+    protected abstract MvpPresenter providePresenter();
 
     protected final FragmentComponent getFragmentComponent() {
         return fragmentComponent;
