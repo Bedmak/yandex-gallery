@@ -1,4 +1,4 @@
-package com.example.yandex_gallery.ui.main;
+package com.example.yandex_gallery.ui.gallery;
 
 
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.example.yandex_gallery.R;
 import com.example.yandex_gallery.data.models.ImagesResponse;
 import com.example.yandex_gallery.ui.base.BaseFragment;
 import com.example.yandex_gallery.ui.base.MvpPresenter;
-import com.example.yandex_gallery.ui.main.adapter.GalleryAdapter;
+import com.example.yandex_gallery.ui.gallery.adapter.GalleryAdapter;
 import com.example.yandex_gallery.utils.NetworkUtil;
 import com.example.yandex_gallery.utils.listener.PaginationScrollListener;
 

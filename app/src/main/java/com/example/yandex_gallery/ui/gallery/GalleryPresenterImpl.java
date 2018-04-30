@@ -1,4 +1,4 @@
-package com.example.yandex_gallery.ui.main;
+package com.example.yandex_gallery.ui.gallery;
 
 
 import com.example.yandex_gallery.data.repository.ApiRepository;

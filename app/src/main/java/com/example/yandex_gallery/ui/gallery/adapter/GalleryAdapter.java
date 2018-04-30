@@ -1,4 +1,4 @@
-package com.example.yandex_gallery.ui.main.adapter;
+package com.example.yandex_gallery.ui.gallery.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

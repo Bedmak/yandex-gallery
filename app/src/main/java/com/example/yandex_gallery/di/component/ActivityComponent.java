@@ -6,7 +6,7 @@ import com.example.yandex_gallery.data.network.Api;
 import com.example.yandex_gallery.di.ActivityContext;
 import com.example.yandex_gallery.di.module.ActivityModule;
 import com.example.yandex_gallery.di.scope.PerActivity;
-import com.example.yandex_gallery.ui.main.MainActivity;
+import com.example.yandex_gallery.ui.MainActivity;
 import com.example.yandex_gallery.utils.NetworkUtil;
 
 import dagger.Component;
