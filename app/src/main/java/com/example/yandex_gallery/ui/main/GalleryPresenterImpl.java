@@ -1,6 +1,5 @@
 package com.example.yandex_gallery.ui.main;
 
-import android.annotation.SuppressLint;
 
 import com.example.yandex_gallery.data.repository.ApiRepository;
 import com.example.yandex_gallery.ui.base.BasePresenter;
@@ -18,16 +17,37 @@ public class GalleryPresenterImpl extends BasePresenter<GalleryContract.GalleryV
         this.apiRepository = apiRepository;
     }
 
-    @SuppressLint("CheckResult")
     @Override
-    public void requestImagesInfo(int offset) {
-        apiRepository.requestImagesData(20, offset)
-                .doOnSubscribe(disposable -> getCompositeDisposable().add(disposable))
-                .subscribe(
-                        imagesResponse -> getView().showImages(imagesResponse.getEmbedded().getItems()),
-                        e -> {
-                            Timber.e(e);
-                        });
+    public void requestImages(int offset) {
+        getView().showLoading();
+        getView().hideErrorView();
+        getCompositeDisposable().add(
+                apiRepository.requestImagesData(10, offset)
+                        .subscribe(
+                                imagesResponse -> {
+                                    getView().hideLoading();
+                                    getView().hideErrorView();
+                                    getView().showImages(imagesResponse);
+                                    },
+                                err -> {
+                                    getView().hideLoading();
+                                    getView().showErrorView(err);
+                                    Timber.e(err);
+                                })
+        );
+    }
+
+    @Override
+    public void requestMoreImages(int offset) {
+
+        getCompositeDisposable().add(
+                apiRepository.requestImagesData(10, offset)
+                        .subscribe(
+                                imagesResponse -> getView().showMoreImages(imagesResponse),
+                                err -> {
+                                    Timber.d(err);
+                                })
+        );
     }
 
 }

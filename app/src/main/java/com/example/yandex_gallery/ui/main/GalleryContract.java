@@ -1,19 +1,24 @@
 package com.example.yandex_gallery.ui.main;
 
-import com.example.yandex_gallery.data.models.Item;
+import com.example.yandex_gallery.data.models.ImagesResponse;
 import com.example.yandex_gallery.ui.base.MvpPresenter;
 import com.example.yandex_gallery.ui.base.MvpView;
 
-import java.util.List;
 
 public interface GalleryContract {
 
     interface GalleryView extends MvpView {
-        void showImages(List<Item> items);
+        void showImages(ImagesResponse response);
+        void showMoreImages(ImagesResponse response);
+        void showLoading();
+        void hideLoading();
+        void showErrorView(Throwable throwable);
+        void hideErrorView();
     }
 
     interface GalleryPresenter extends MvpPresenter<GalleryView> {
-        void requestImagesInfo(int offset);
+        void requestImages(int offset);
+        void requestMoreImages(int offset);
     }
 
 }
