@@ -31,6 +31,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private Context context;
     private final List<Item> items;
+    private OnImageClickListener listener;
 
     private boolean isLoadingAdded = false;
 
@@ -73,13 +74,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private GalleryViewHolder createItemViewHolder(View view) {
         GalleryViewHolder viewHolder = new GalleryViewHolder(view);
-        //viewHolder.container.setOnClickListener();
+        viewHolder.container.setOnClickListener(view1 -> listener.onImageClick(viewHolder.getAdapterPosition()));
         return viewHolder;
     }
 
     private LoadingViewHolder createLoadingViewHolder(View view) {
         LoadingViewHolder viewHolder = new LoadingViewHolder(view);
-        //
         return viewHolder;
     }
 
@@ -107,6 +107,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private void bindLoadingViewHolder(LoadingViewHolder vh) {
         vh.progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void setOnImageClickListener(OnImageClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -155,5 +159,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private Item getItem(int position) {
         return items.get(position);
+    }
+
+    public interface OnImageClickListener {
+        void onImageClick(int imageId);
     }
 }

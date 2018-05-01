@@ -1,6 +1,7 @@
 package com.example.yandex_gallery.ui.gallery;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.example.yandex_gallery.R;
 import com.example.yandex_gallery.data.models.ImagesResponse;
 import com.example.yandex_gallery.ui.base.BaseFragment;
 import com.example.yandex_gallery.ui.base.MvpPresenter;
+import com.example.yandex_gallery.ui.detailed.DetailedActivity;
 import com.example.yandex_gallery.ui.gallery.adapter.GalleryAdapter;
 import com.example.yandex_gallery.utils.NetworkUtil;
 import com.example.yandex_gallery.utils.listener.PaginationScrollListener;
@@ -28,7 +30,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class GalleryFragment extends BaseFragment implements GalleryContract.GalleryView {
+import static com.example.yandex_gallery.utils.AppConstants.IMAGE_ID;
+
+public class GalleryFragment extends BaseFragment implements GalleryContract.GalleryView, GalleryAdapter.OnImageClickListener {
 
     @BindView(R.id.galleryRecycler)
     RecyclerView galleryRecycler;
@@ -74,6 +78,7 @@ public class GalleryFragment extends BaseFragment implements GalleryContract.Gal
         galleryRecycler.setAdapter(galleryAdapter);
         galleryRecycler.setLayoutManager(gridLayoutManager);
         galleryRecycler.setItemAnimator(new DefaultItemAnimator());
+        galleryAdapter.setOnImageClickListener(this);
 
         galleryRecycler.addOnScrollListener(new PaginationScrollListener(gridLayoutManager) {
             @Override
@@ -179,5 +184,12 @@ public class GalleryFragment extends BaseFragment implements GalleryContract.Gal
     @Override
     protected void inject() {
         getFragmentComponent().inject(this);
+    }
+
+    @Override
+    public void onImageClick(int imageId) {
+        Intent intent = new Intent(getActivity(), DetailedActivity.class);
+        intent.putExtra(IMAGE_ID, imageId);
+        startActivity(intent);
     }
 }
