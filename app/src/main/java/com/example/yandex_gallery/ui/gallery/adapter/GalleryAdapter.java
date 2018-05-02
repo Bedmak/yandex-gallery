@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,7 +14,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.example.yandex_gallery.R;
 import com.example.yandex_gallery.data.models.Item;
 import com.example.yandex_gallery.di.ActivityContext;
 import com.example.yandex_gallery.ui.base.BaseViewHolder;
@@ -44,19 +42,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        BaseViewHolder viewHolder = null;
-        LayoutInflater inflater = LayoutInflater.from(context);
         switch (viewType) {
             case ITEM:
-                View viewItem = inflater.inflate(R.layout.gallery_item, parent, false);
-                viewHolder = createItemViewHolder(viewItem);
-                break;
+                GalleryViewHolder vh = GalleryViewHolder.inflate(parent);
+                vh.container.setOnClickListener(view ->
+                        listener.onImageClick(vh.getAdapterPosition()));
+                return vh;
             case LOADING:
-                View viewLoad = inflater.inflate(R.layout.gallery_progress, parent, false);
-                viewHolder = createLoadingViewHolder(viewLoad);
-                break;
+                return LoadingViewHolder.inflate(parent);
+            default:
+                return null;
         }
-        return viewHolder;
     }
 
     @Override
@@ -70,17 +66,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 break;
         }
 
-    }
-
-    private GalleryViewHolder createItemViewHolder(View view) {
-        GalleryViewHolder viewHolder = new GalleryViewHolder(view);
-        viewHolder.container.setOnClickListener(view1 -> listener.onImageClick(viewHolder.getAdapterPosition()));
-        return viewHolder;
-    }
-
-    private LoadingViewHolder createLoadingViewHolder(View view) {
-        LoadingViewHolder viewHolder = new LoadingViewHolder(view);
-        return viewHolder;
     }
 
     private void bindItemViewHolder(GalleryViewHolder vh, int aPosition) {
