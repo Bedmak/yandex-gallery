@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.yandex_gallery.R;
-import com.example.yandex_gallery.data.models.Item;
 import com.example.yandex_gallery.ui.base.BaseFragment;
 import com.example.yandex_gallery.ui.base.MvpPresenter;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -35,11 +34,11 @@ public class DetailedFragment extends BaseFragment implements DetailedContract.D
     }
 
     @Override
-    public void showImage(Item image) {
+    public void showImage(String url) {
         //progressBar.setVisibility(View.GONE);
         Glide
                 .with(this)
-                .load(image.getFile())
+                .load(url)
                 .into(imageView);
     }
 

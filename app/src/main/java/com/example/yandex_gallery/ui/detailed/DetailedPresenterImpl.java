@@ -21,12 +21,13 @@ public class DetailedPresenterImpl extends BasePresenter<DetailedContract.Detail
         getView().showLoading();
         getView().hideErrorView();
         getCompositeDisposable().add(
-                apiRepository.requestImagesData(1, offset)
+                apiRepository.requestImageFromDB((offset - (offset % 10)), offset)  // (offset - (offset % 10) - this expression indicates which entry contains a link to the image
+                .onErrorResumeNext(apiRepository.requestImage(offset))
                         .subscribe(
-                                imagesResponse -> {
+                                item -> {
                                     getView().hideLoading();
                                     getView().hideErrorView();
-                                    getView().showImage(imagesResponse.getEmbedded().getItems().get(0));
+                                    getView().showImage(item.getFile());
                                 },
                                 err -> {
                                     getView().hideLoading();

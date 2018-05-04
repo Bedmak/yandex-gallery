@@ -22,7 +22,8 @@ public class GalleryPresenterImpl extends BasePresenter<GalleryContract.GalleryV
         getView().showLoading();
         getView().hideErrorView();
         getCompositeDisposable().add(
-                apiRepository.requestImagesData(10, offset)
+                apiRepository.requestImagesDataFromDB(offset)
+                        .onErrorResumeNext(apiRepository.requestImagesData(10, offset))
                         .subscribe(
                                 imagesResponse -> {
                                     getView().hideLoading();
@@ -41,11 +42,12 @@ public class GalleryPresenterImpl extends BasePresenter<GalleryContract.GalleryV
     public void requestMoreImages(int offset) {
 
         getCompositeDisposable().add(
-                apiRepository.requestImagesData(10, offset)
+                apiRepository.requestImagesDataFromDB(offset)
+                        .onErrorResumeNext(apiRepository.requestImagesData(10, offset))
                         .subscribe(
                                 imagesResponse -> getView().showMoreImages(imagesResponse),
                                 err -> {
-                                    Timber.d(err);
+                                    Timber.e(err);
                                 })
         );
     }
