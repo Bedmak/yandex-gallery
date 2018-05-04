@@ -37,7 +37,8 @@ dependencies {
             "io.reactivex.rxjava2:rxjava:$rxjava",
             "io.reactivex.rxjava2:rxandroid:$rxandroid",
             "com.google.dagger:dagger:$dagger",
-            "com.github.bumptech.glide:glide:$glide"
+            "com.github.bumptech.glide:glide:$glide",
+            "com.github.chrisbanes:PhotoView:$photoView"
     )
 
     annotationProcessor(

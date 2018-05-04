@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.yandex_gallery.R;
 import com.example.yandex_gallery.data.models.Item;
 import com.example.yandex_gallery.ui.base.BaseFragment;
 import com.example.yandex_gallery.ui.base.MvpPresenter;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import javax.inject.Inject;
 
@@ -23,7 +23,7 @@ import static com.example.yandex_gallery.utils.AppConstants.IMAGE_ID;
 public class DetailedFragment extends BaseFragment implements DetailedContract.DetailedView {
 
     @BindView(R.id.detailedImage)
-    ImageView imageView;
+    PhotoView imageView;
 
     @Inject
     DetailedPresenterImpl presenter;

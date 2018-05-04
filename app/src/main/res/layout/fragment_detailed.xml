@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.detailed.DetailedFragment">
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/detailedImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
