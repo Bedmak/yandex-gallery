@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">yandex-gallery</string>
 
+    <string name="gallery_title">Gallery</string>
     <string name="btn_retry">Retry</string>
     <string name="error_msg_gallery">Sorry! Couldn\'t fetch images.</string>
     <string name="error_msg_detailed">Sorry! Couldn\'t fetch image.</string>
