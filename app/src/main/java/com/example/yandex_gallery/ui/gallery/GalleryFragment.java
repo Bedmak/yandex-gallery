@@ -22,7 +22,6 @@ import com.example.yandex_gallery.ui.gallery.adapter.GalleryAdapter;
 import com.example.yandex_gallery.utils.NetworkUtil;
 import com.example.yandex_gallery.utils.listener.PaginationScrollListener;
 
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -40,11 +39,15 @@ public class GalleryFragment extends BaseFragment implements GalleryContract.Gal
     @BindView(R.id.galleryProgress)
     ProgressBar progressBar;
 
-    @BindView(R.id.errorTextCause)
-    TextView txtError;
-
     @BindView(R.id.error_layout)
     LinearLayout errorLayout;
+
+    @BindView(R.id.errorText)
+    TextView txtError;
+
+    @BindView(R.id.errorTextCause)
+    TextView txtErrorCause;
+
 
     @OnClick(R.id.errorBtnRetry)
     void onRetryClick() {
@@ -107,7 +110,6 @@ public class GalleryFragment extends BaseFragment implements GalleryContract.Gal
 
     @Override
     public void showImages(ImagesResponse response) {
-        progressBar.setVisibility(View.GONE);
         galleryAdapter.setData(response.getEmbedded().getItems());
         if (response.getEmbedded().getTotal() % 10 != 0) {
             totalPages = (response.getEmbedded().getTotal() / 10) + 1;
@@ -147,7 +149,8 @@ public class GalleryFragment extends BaseFragment implements GalleryContract.Gal
             errorLayout.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
 
-            txtError.setText(fetchErrorMessage(throwable));
+            txtError.setText(getResources().getString(R.string.error_msg_gallery));
+            txtErrorCause.setText(networkUtil.fetchErrorMessage(throwable));
         }
     }
 
@@ -157,18 +160,6 @@ public class GalleryFragment extends BaseFragment implements GalleryContract.Gal
             errorLayout.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
-    }
-
-    private String fetchErrorMessage(Throwable throwable) {
-        String errorMsg = getResources().getString(R.string.error_msg_unknown);
-
-        if (!networkUtil.isNetworkConnected()) {
-            errorMsg = getResources().getString(R.string.error_msg_no_internet);
-        } else if (throwable instanceof TimeoutException) {
-            errorMsg = getResources().getString(R.string.error_msg_timeout);
-        }
-
-        return errorMsg;
     }
 
     @Override
