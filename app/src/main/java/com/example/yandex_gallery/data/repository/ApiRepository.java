@@ -3,7 +3,6 @@ package com.example.yandex_gallery.data.repository;
 import com.example.yandex_gallery.data.SchedulerProvider;
 import com.example.yandex_gallery.data.models.Data;
 import com.example.yandex_gallery.data.models.ImagesResponse;
-import com.example.yandex_gallery.data.models.Item;
 import com.example.yandex_gallery.data.network.Api;
 
 import javax.inject.Inject;
@@ -44,23 +43,4 @@ public class ApiRepository {
             throw new NullPointerException();
         });
     }
-
-    public Single<Item> requestImage(int offset) {
-        return api.getListImages(PUBLIC_KEY, 1, offset)
-                .map(response -> response.getEmbedded().getItems().get(0))
-                .compose(schedulerProvider.applyIoSchedulers());
-    }
-
-    public Single<Item> requestImageFromDB(int offset, int id) {
-        return Single.fromCallable(() -> {
-            Data data = Paper.book().read(IMAGE_RESPONSE + offset);
-            if (data.isUpToDate()) {
-                return data.getResponse().getEmbedded().getItems().get(id);
-            } else {
-                Paper.book().delete(IMAGE_RESPONSE + offset);
-            }
-            throw new NullPointerException();
-        });
-    }
-
 }

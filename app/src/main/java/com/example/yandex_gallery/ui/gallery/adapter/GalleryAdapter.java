@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -44,10 +46,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case ITEM:
-                GalleryViewHolder vh = GalleryViewHolder.inflate(parent);
-                vh.container.setOnClickListener(view ->
-                        listener.onImageClick(vh.getAdapterPosition()));
-                return vh;
+                return GalleryViewHolder.inflate(parent);
             case LOADING:
                 return LoadingViewHolder.inflate(parent);
             default:
@@ -69,11 +68,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
 
     private void bindItemViewHolder(GalleryViewHolder vh, int aPosition) {
-        //Timber.e("Load " + aPosition + " " + items.get(aPosition).getFile());
         Glide
                 .with(context)
                 .load(items.get(aPosition).getFile())
-                .apply(new RequestOptions().centerCrop())
+                .apply(RequestOptions.centerCropTransform())
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -88,6 +86,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     }
                 })
                 .into(vh.image);
+
+        ViewCompat.setTransitionName(vh.image, items.get(aPosition).getName());
+        vh.container.setOnClickListener(view ->
+                listener.onImageClick(items.get(aPosition).getFile(), vh.image));
     }
 
     private void bindLoadingViewHolder(LoadingViewHolder vh) {
@@ -147,6 +149,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
 
     public interface OnImageClickListener {
-        void onImageClick(int imageId);
+        void onImageClick(String url, ImageView sharedImageView);
     }
 }

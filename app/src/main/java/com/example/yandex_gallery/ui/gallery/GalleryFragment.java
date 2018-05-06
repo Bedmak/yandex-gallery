@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,7 +32,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import static com.example.yandex_gallery.utils.AppConstants.IMAGE_ID;
+import static com.example.yandex_gallery.utils.AppConstants.IMAGE_TRANSITION;
+import static com.example.yandex_gallery.utils.AppConstants.IMAGE_URL;
 
 public class GalleryFragment extends BaseFragment implements GalleryContract.GalleryView, GalleryAdapter.OnImageClickListener {
 
@@ -178,9 +182,15 @@ public class GalleryFragment extends BaseFragment implements GalleryContract.Gal
     }
 
     @Override
-    public void onImageClick(int imageId) {
+    public void onImageClick(String url, ImageView sharedImageView) {
         Intent intent = new Intent(getActivity(), DetailedActivity.class);
-        intent.putExtra(IMAGE_ID, imageId);
-        startActivity(intent);
+        intent.putExtra(IMAGE_URL, url);
+        intent.putExtra(IMAGE_TRANSITION, ViewCompat.getTransitionName(sharedImageView));
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                getActivity(),
+                sharedImageView,
+                ViewCompat.getTransitionName(sharedImageView)
+        );
+        startActivity(intent, options.toBundle());
     }
 }

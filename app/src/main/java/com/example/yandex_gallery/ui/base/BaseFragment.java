@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.example.yandex_gallery.di.component.DaggerFragmentComponent;
 import com.example.yandex_gallery.di.component.FragmentComponent;
-import com.example.yandex_gallery.di.module.FragmentModule;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -47,7 +46,9 @@ public abstract class BaseFragment extends Fragment implements MvpView {
         View view = inflater.inflate(provideLayout(), container, false);
         unbinder = ButterKnife.bind(this, view);
         presenter = providePresenter();
-        presenter.onAttach(this);
+        if (presenter != null)
+            presenter.onAttach(this);
+
         return view;
     }
 
@@ -55,7 +56,8 @@ public abstract class BaseFragment extends Fragment implements MvpView {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        presenter.onDetach();
+        if (presenter != null)
+            presenter.onDetach();
     }
 
     public FragmentComponent initDaggerFragmentComponent() {
@@ -66,7 +68,9 @@ public abstract class BaseFragment extends Fragment implements MvpView {
 
     protected abstract int provideLayout();
 
-    protected abstract MvpPresenter providePresenter();
+    protected MvpPresenter providePresenter() {
+        return null;
+    }
 
     protected final FragmentComponent getFragmentComponent() {
         return fragmentComponent;

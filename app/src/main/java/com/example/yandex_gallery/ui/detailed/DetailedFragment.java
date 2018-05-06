@@ -1,6 +1,8 @@
 package com.example.yandex_gallery.ui.detailed;
 
 
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,9 +12,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.yandex_gallery.R;
 import com.example.yandex_gallery.ui.base.BaseFragment;
-import com.example.yandex_gallery.ui.base.MvpPresenter;
 import com.example.yandex_gallery.utils.NetworkUtil;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -20,10 +25,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-import static com.example.yandex_gallery.utils.AppConstants.IMAGE_ID;
+import static com.example.yandex_gallery.utils.AppConstants.IMAGE_TRANSITION;
+import static com.example.yandex_gallery.utils.AppConstants.IMAGE_URL;
 
 
-public class DetailedFragment extends BaseFragment implements DetailedContract.DetailedView {
+public class DetailedFragment extends BaseFragment implements DetailedView {
 
     @BindView(R.id.detailedImage)
     PhotoView imageView;
@@ -41,15 +47,20 @@ public class DetailedFragment extends BaseFragment implements DetailedContract.D
     TextView txtErrorCause;
 
     @Inject
-    DetailedPresenterImpl presenter;
-
-    @Inject
     NetworkUtil networkUtil;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.requestDetailedImage(getActivity().getIntent().getIntExtra(IMAGE_ID, 0));
+        getActivity().supportStartPostponedEnterTransition();
+        Bundle bundle = getActivity().getIntent().getExtras();
+        String url = bundle.getString(IMAGE_URL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String imageTransitionName = bundle.getString(IMAGE_TRANSITION);
+            imageView.setTransitionName(imageTransitionName);
+        }
+        showLoading();
+        showImage(url);
     }
 
     @Override
@@ -57,6 +68,23 @@ public class DetailedFragment extends BaseFragment implements DetailedContract.D
         Glide
                 .with(this)
                 .load(url)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        hideLoading();
+                        showErrorView(e);
+                        getActivity().supportStartPostponedEnterTransition();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        hideLoading();
+                        hideErrorView();
+                        getActivity().supportStartPostponedEnterTransition();
+                        return false;
+                    }
+                })
                 .into(imageView);
     }
 
@@ -92,11 +120,6 @@ public class DetailedFragment extends BaseFragment implements DetailedContract.D
     @Override
     protected int provideLayout() {
         return R.layout.fragment_detailed;
-    }
-
-    @Override
-    protected MvpPresenter providePresenter() {
-        return presenter;
     }
 
     @Override
