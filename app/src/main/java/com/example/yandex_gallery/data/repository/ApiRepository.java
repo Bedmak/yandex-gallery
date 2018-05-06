@@ -1,34 +1,36 @@
 package com.example.yandex_gallery.data.repository;
 
+import com.example.yandex_gallery.data.SchedulerProvider;
 import com.example.yandex_gallery.data.models.Data;
 import com.example.yandex_gallery.data.models.ImagesResponse;
 import com.example.yandex_gallery.data.models.Item;
 import com.example.yandex_gallery.data.network.Api;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.paperdb.Paper;
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 import static com.example.yandex_gallery.utils.AppConstants.IMAGE_RESPONSE;
 import static com.example.yandex_gallery.utils.AppConstants.PUBLIC_KEY;
 
+@Singleton
 public class ApiRepository {
 
     private final Api api;
+    private final SchedulerProvider schedulerProvider;
 
     @Inject
-    ApiRepository(Api api) {
+    public ApiRepository(Api api, SchedulerProvider schedulerProvider) {
         this.api = api;
+        this.schedulerProvider = schedulerProvider;
     }
 
     public Single<ImagesResponse> requestImagesData(int limit, int offset) {
         return api.getListImages(PUBLIC_KEY, limit, offset)
                 .doOnSuccess(response -> Paper.book().write(IMAGE_RESPONSE + offset, new Data(response)))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(schedulerProvider.applyIoSchedulers());
     }
 
     public Single<ImagesResponse> requestImagesDataFromDB(int offset) {
@@ -46,8 +48,7 @@ public class ApiRepository {
     public Single<Item> requestImage(int offset) {
         return api.getListImages(PUBLIC_KEY, 1, offset)
                 .map(response -> response.getEmbedded().getItems().get(0))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(schedulerProvider.applyIoSchedulers());
     }
 
     public Single<Item> requestImageFromDB(int offset, int id) {

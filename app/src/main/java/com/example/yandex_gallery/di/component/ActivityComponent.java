@@ -2,7 +2,7 @@ package com.example.yandex_gallery.di.component;
 
 import android.content.Context;
 
-import com.example.yandex_gallery.data.network.Api;
+import com.example.yandex_gallery.data.repository.ApiRepository;
 import com.example.yandex_gallery.di.ActivityContext;
 import com.example.yandex_gallery.di.module.ActivityModule;
 import com.example.yandex_gallery.di.scope.PerActivity;
@@ -21,6 +21,6 @@ public interface ActivityComponent {
     @ActivityContext
     Context context();
 
-    Api api();
+    ApiRepository apiRepository();
     NetworkUtil networkUtil();
 }
