@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.detailed.DetailedActivity"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryBackgroundDark">
+    android:background="@color/colorPrimaryDark">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/detailedToolbar"

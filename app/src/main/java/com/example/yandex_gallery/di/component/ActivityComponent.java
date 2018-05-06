@@ -1,6 +1,7 @@
 package com.example.yandex_gallery.di.component;
 
 import android.content.Context;
+import android.view.WindowManager;
 
 import com.example.yandex_gallery.data.repository.ApiRepository;
 import com.example.yandex_gallery.di.ActivityContext;
@@ -20,6 +21,7 @@ public interface ActivityComponent {
 
     @ActivityContext
     Context context();
+    WindowManager windowManager();
 
     ApiRepository apiRepository();
     NetworkUtil networkUtil();

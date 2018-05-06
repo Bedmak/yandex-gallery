@@ -3,6 +3,7 @@ package com.example.yandex_gallery.ui.gallery.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.example.yandex_gallery.R;
@@ -18,6 +19,9 @@ public class LoadingViewHolder extends BaseViewHolder {
                 .inflate(R.layout.gallery_progress, parent, false);
         return new LoadingViewHolder(view);
     }
+
+    @BindView(R.id.progressContainer)
+    FrameLayout container;
 
     @BindView(R.id.loadmore_progress)
     ProgressBar progressBar;

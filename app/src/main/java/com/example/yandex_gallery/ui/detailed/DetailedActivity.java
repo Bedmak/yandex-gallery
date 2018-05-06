@@ -27,7 +27,6 @@ public class DetailedActivity extends BaseActivity {
     private void initToolbar() {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(view -> onBackPressed());
-        toolbar.setTitle("Detailed image");
     }
 
     @Override

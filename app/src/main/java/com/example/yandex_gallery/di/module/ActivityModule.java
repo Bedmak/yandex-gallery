@@ -2,6 +2,7 @@ package com.example.yandex_gallery.di.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.WindowManager;
 
 import com.example.yandex_gallery.di.ActivityContext;
 import com.example.yandex_gallery.di.scope.PerActivity;
@@ -23,4 +24,8 @@ public class ActivityModule {
     Context provideActivityContext() {
         return activity;
     }
+
+    @PerActivity
+    @Provides
+    WindowManager provideWindowManager() { return activity.getWindowManager(); }
 }

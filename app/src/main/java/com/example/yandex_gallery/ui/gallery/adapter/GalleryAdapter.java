@@ -1,13 +1,16 @@
 package com.example.yandex_gallery.ui.gallery.adapter;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -30,14 +33,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private static final int ITEM = 0, LOADING = 1;
 
     private Context context;
+    private Display display;
     private final List<Item> items;
     private OnImageClickListener listener;
 
     private boolean isLoadingAdded = false;
 
     @Inject
-    GalleryAdapter(@ActivityContext Context context) {
+    GalleryAdapter(@ActivityContext Context context, WindowManager windowManager) {
         this.context = context;
+        display = windowManager.getDefaultDisplay();
         items = new ArrayList<>();
     }
 
@@ -86,13 +91,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     }
                 })
                 .into(vh.image);
-
         ViewCompat.setTransitionName(vh.image, items.get(aPosition).getName());
         vh.container.setOnClickListener(view ->
                 listener.onImageClick(items.get(aPosition).getFile(), vh.image));
     }
 
     private void bindLoadingViewHolder(LoadingViewHolder vh) {
+        Point size = new Point();
+        display.getSize(size);
+        vh.container.getLayoutParams().width = size.x;
         vh.progressBar.setVisibility(View.VISIBLE);
     }
 
